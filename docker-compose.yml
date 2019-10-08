@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  gitlab-server:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab-server
+    hostname: gitlab-server
+    volumes:
+      - './gitlab-config:/etc/gitlab'
+      - './gitlab-logs:/var/log/gitlab'
+      - './gitlab-data:/var/opt/gitlab'
+    ports:
+      - '2222:22'
+      - '8081:8081'
+      - '4567:4567'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://${GITLAB_IP}:8081'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        registry_external_url 'http://${GITLAB_IP}:4567'
+        registry['enable'] = true
+        unicorn['socket'] = '/opt/gitlab/var/unicorn/gitlab.socket'
+    networks:
+      - gitlab-network
+
+  gitlab-runner1:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    hostname: gitlab-runner
+    volumes:
+      - './gitlab-runner-config:/etc/gitlab-runner:Z'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    networks:
+      - gitlab-network
+
+networks:
+  gitlab-network:
+    name: gitlab-network
