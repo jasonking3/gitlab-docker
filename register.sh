@@ -1,8 +1,8 @@
 #!/bin/sh
 # Get the registration token from:
 # http://localhost:8081/root/${project}/settings/ci_cd
-# Then export it in your environment:
-# export REGISTRATION_TOKEN=<your token>
+# Then:
+# REGISTRATION_TOKEN=<your token> ./register.sh
 
 docker exec -it gitlab-runner \
   gitlab-runner register \
