@@ -18,6 +18,8 @@ Tooling to run GitLab CE and GitLab Runner in Docker.
     echo GITLAB_IP=192.168.1.10 > .env
     ```
     > Note: Replace `192.168.1.10` with your IP address.
+
+    > Note: Windows PowerShell may create the new file in UTF-16 encoding if you use `>` redirection.  docker-compose will fail unless the file is UTF-8.  If this happens, create the .env file using a text editor and assign the `GITLAB_IP` variable that way.
 1. Bring up gitlab-ce and gitlab-runner.
     ```
     docker-compose up -d
